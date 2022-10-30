@@ -5,7 +5,7 @@ https://airflow.apache.org/docs/apache-airflow/stable/howto/docker-compose/index
 Para facilitar foi criado este repositório onde pode apenas executar simples passos abaixo e você terá um container Docker  com o Airflow pronto para estudos e explorar a ferramenta.
 
 ## Clonar o repositório
-git clone <UrlRepositorioAqui>
+git clone https://github.com/sanchesfranklin/projeto-airflow-base.git
 
 ## No Linux
 - Configurando o usuário correto para uso do Airflow: 
