@@ -38,7 +38,10 @@
 #
 # Feel free to modify this file to suit your needs.
 ---
+
+
 version: "3"
+
 x-airflow-common: &airflow-common
     # In order to add custom dependencies or upgrade provider packages you can use your extended image.
     # Comment the image line, place your Dockerfile in the directory where you placed the docker-compose.yaml
@@ -56,11 +59,20 @@ x-airflow-common: &airflow-common
         AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: "true"
         AIRFLOW__CORE__LOAD_EXAMPLES: "true"
         AIRFLOW__API__AUTH_BACKENDS: "airflow.api.auth.backend.basic_auth"
-        _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:-}
+        _PIP_ADDITIONAL_REQUIREMENTS: ${_PIP_ADDITIONAL_REQUIREMENTS:- lxml==4.6.3}
+        # SMTP - Envio de emails
+        AIRFLOW__SMTP__SMTP_HOST: smtp.mailtrap.io
+        AIRFLOW__SMTP__SMTP_STARTTLS: True
+        AIRFLOW__SMTP__SMTP_SSL: False
+        AIRFLOW__SMTP__SMTP_USER: 40570a76560227
+        AIRFLOW__SMTP__SMTP_PASSWORD: de058c1db7ee17
+        AIRFLOW__SMTP__SMTP_PORT: 2525
+        AIRFLOW__SMTP__SMTP_MAIL_FROM: airflow-notificacao@airflow.com
     volumes:
         - ./dags:/opt/airflow/dags
         - ./logs:/opt/airflow/logs
         - ./plugins:/opt/airflow/plugins
+        - ./data:/opt/airflow/data
     user: "${AIRFLOW_UID:-50000}:0"
     depends_on: &airflow-common-depends-on
         redis:
@@ -278,6 +290,23 @@ services:
             <<: *airflow-common-depends-on
             airflow-init:
                 condition: service_completed_successfully
+    
+    postgres_olapp:
+        image: postgres:latest
+        restart: always
+        environment:
+          - POSTGRES_USER=airflow
+          - POSTGRES_PASSWORD=airflow
+        logging:
+          options:
+            max-size: 10m
+            max-file: "3"
+        ports:
+          - '5460:5460'
+        volumes: 
+          - postgres_olap-data:/var/lib/postgresql/data
+          # Copia o script SQL para o container executar
+          - ./script_sql/create_database.sql:/docker-entrypoint-initdb.d/create_database.sql
 
 volumes:
     postgres-db-volume:
