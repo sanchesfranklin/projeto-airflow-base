@@ -16,6 +16,9 @@ Realizamos o acesso ao site citado acima, para extrair a tabela com todas as tax
 
 Abaixo a imagem da DAG e Envio do Email:
 
+![Pipeline-airflow-dag](https://user-images.githubusercontent.com/55898372/200649864-55570b71-aa25-4f8e-a2dc-41213e0510ad.png)
+
+![email-notificacao-airflow](https://user-images.githubusercontent.com/55898372/200649892-edfa572b-c471-4d14-a7c6-faaf31550c53.png)
 
 # Utilizando o projeto
 
