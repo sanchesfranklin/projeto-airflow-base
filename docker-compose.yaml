@@ -297,16 +297,17 @@ services:
         environment:
           - POSTGRES_USER=airflow
           - POSTGRES_PASSWORD=airflow
+        volumes: 
+          - postgres_olap-data:/var/lib/postgresql/data
+          # Copia o script SQL para o container executar
+          - ./script_sql/create_database.sql:/docker-entrypoint-initdb.d/create_database.sql
         logging:
           options:
             max-size: 10m
             max-file: "3"
         ports:
           - '5460:5460'
-        volumes: 
-          - postgres_olap-data:/var/lib/postgresql/data
-          # Copia o script SQL para o container executar
-          - ./script_sql/create_database.sql:/docker-entrypoint-initdb.d/create_database.sql
 
 volumes:
     postgres-db-volume:
+    postgres_olap-data:
